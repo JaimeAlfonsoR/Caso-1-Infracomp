@@ -5,8 +5,6 @@ public class Buzon extends Thread{
     private int capacidad;
     private int thread;
     private int ocupacion;
-    private int lec=0;
-    private int esc=0;
     private ArrayList<String> mensajes;
     
 
@@ -19,17 +17,7 @@ public class Buzon extends Thread{
 
 
     }
-    public boolean estaVacio(){
-    	while (esc!=0) {
-    		try {
-				wait();
-			} catch (InterruptedException e) {
-			}
-    	}
-    	lec+=1;
-    	return ocupacion==0;
-    	
-    }
+
     public synchronized String quitar() {
     	while (ocupacion==0){
     		try {
@@ -41,27 +29,45 @@ public class Buzon extends Thread{
     	ocupacion-=1;
     	String txt= mensajes.get(-1);
     	mensajes.remove(-1);
+    	notify();
+    	return txt;
+    }
+    public synchronized String quitarf() {
+    	if (ocupacion==0){
+				Thread.yield();
+    	}	
+   		
+    	ocupacion-=1;
+    	String txt= mensajes.get(-1);
+    	mensajes.remove(-1);
     	return txt;
     }
     public synchronized void poner(String t) {
-    	while ((ocupacion==capacidad)||(esc>0)||(lec>0)){
+    	while (ocupacion==capacidad){
     		try {
 				wait();
 			} catch (InterruptedException e) {
 			}
     	}
    		
-    	ocupacion-=1;
-    	esc+=1;
+    	ocupacion+=1;
+    	mensajes.add(t);
+    	notify();
+
+    }
+    public synchronized void poneri(String t) {
+    	if(ocupacion==capacidad){
+    		Thread.yield();
+    	}
+    	
+   		
+    	ocupacion+=1;
     	mensajes.add(t);
 
     }
     
 
 
-    public void run()
-    {
 
-    }
 
 }
