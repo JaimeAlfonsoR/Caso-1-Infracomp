@@ -1,6 +1,6 @@
 
 public class Procesot extends Thread {
-	private static int nMensajes; 
+	private int nMensajes; 
 	private String datos;
 	private Buzon entrada;
 	private Buzon salida;
@@ -12,7 +12,7 @@ public class Procesot extends Thread {
 		salida=s;
 		nivel=n;
 		M=m;
-		Procesot.nMensajes=z;
+		nMensajes=z;
 		
 	}
 	public void run(){
@@ -24,18 +24,23 @@ public class Procesot extends Thread {
 				salida.poneri(txt);
 				nMensajes-=1;
 			}
+			int e = 0;
+			while (e<M) {
 			
 			salida.poneri("FIN");
-			salida.poneri("FIN");
-			salida.poneri("FIN");
+			}
 		}
 		if (nivel==4) {
 			while (txt!="FIN") {
 				txt=entrada.quitarf();
+				System.out.println(txt);
 			}
 			txt=entrada.quitarf();
+			System.out.println(txt);
 			txt=entrada.quitarf();
+			System.out.println(txt);
 			txt=entrada.quitarf();
+			System.out.println(txt);
 		}
 		else {
 			
@@ -44,7 +49,7 @@ public class Procesot extends Thread {
 				txt=entrada.quitar();
 				transformar();
 				salida.poner(txt);
-				nMensajes-=1;
+				//nMensajes-=1;
 			}
 			salida.poner(txt);
 		}	

@@ -1,68 +1,72 @@
 import java.util.ArrayList;
 
-public class Buzon extends Thread{
+public class Buzon {
 
     private int capacidad;
-    private int thread;
+    //private int thread;
     private int ocupacion;
     private ArrayList<String> mensajes;
     
+    public ArrayList<String> darm(){
+    	return mensajes;
+    }
+    
 
 
-    public void Buzon (int pcapacidad, int pthread)
+    public Buzon (int pcapacidad)
     {
         this.capacidad = pcapacidad;
-        this.thread = pthread;
-        mensajes=new ArrayList();
+        //this.thread = pthread;
+        mensajes=new ArrayList<String>();
+        ocupacion=0;
 
 
     }
 
     public synchronized String quitar() {
-    	while (ocupacion==0){
+    	while (this.mensajes.size()<=0){
     		try {
 				wait();
 			} catch (InterruptedException e) {
 			}
     	}
    		
-    	ocupacion-=1;
-    	String txt= mensajes.get(-1);
-    	mensajes.remove(-1);
+    	String txt= mensajes.get(mensajes.size()-1);
+    	mensajes.remove(mensajes.size()-1);
     	notify();
     	return txt;
     }
     public synchronized String quitarf() {
-    	if (ocupacion==0){
+    	String txt="";
+    	if (this.mensajes.size()<=0){
 				Thread.yield();
+				txt= mensajes.get(mensajes.size()-1);
+		    	mensajes.remove(mensajes.size()-1);
     	}	
    		
-    	ocupacion-=1;
-    	String txt= mensajes.get(-1);
-    	mensajes.remove(-1);
     	return txt;
     }
     public synchronized void poner(String t) {
-    	while (ocupacion==capacidad){
+    	while (this.mensajes.size()>=this.capacidad){
     		try {
 				wait();
 			} catch (InterruptedException e) {
 			}
     	}
    		
-    	ocupacion+=1;
     	mensajes.add(t);
+    	System.out.println(mensajes);
     	notify();
 
     }
     public synchronized void poneri(String t) {
-    	if(ocupacion==capacidad){
+    	if(this.mensajes.size()>=this.capacidad){
     		Thread.yield();
+    		mensajes.add(t);
+        	System.out.println(mensajes);
     	}
     	
-   		
-    	ocupacion+=1;
-    	mensajes.add(t);
+    	//ocupacion+=1;
 
     }
     
