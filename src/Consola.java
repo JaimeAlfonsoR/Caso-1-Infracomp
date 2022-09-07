@@ -12,11 +12,11 @@ public class Consola {
 
     public void menu()
     {
+    	Scanner input = new Scanner (System.in);
         System.out.println("Escriba el numero de subconjuntos a generar: ");
-        Scanner input = new Scanner (System.in);
-        this.n= input.nextInt();
+        Consola.n= input.nextInt();
         System.out.println("Escriba el tamaño de los buzones intermedios a generar: ");
-        this.buzIntermedios= input.nextInt();
+        Consola.buzIntermedios= input.nextInt();
         System.out.println("Escriba el tamaño de los buzones extremos a generar: ");
         Consola.buzExtremo= input.nextInt();
 
@@ -36,9 +36,10 @@ public class Consola {
 
     public static void main(String[] args) {
 
-        Consola main = new Consola();
+Consola main = new Consola();
         main.menu();
-        List <Buzon> b1 = new ArrayList();
+        ArrayList <Buzon> b1 = new ArrayList();
+ 
         Buzon b;
         Buzon ultimo;
         ultimo=null;
@@ -46,28 +47,40 @@ public class Consola {
         	if (i==0) {
         		b = new Buzon(buzExtremo);
                 b1.add(b);
-                new Procesot(ultimo,b,0,0,n).start() ;
-                ultimo=b;
+                new procesoi(b1.get(b1.size()-1),0,0,n).start() ;
+                ultimo=b1.get(b1.size()-1);
+                
         	}
         	if (0<i && i<10) {
-        		b = new Buzon(buzIntermedios);
-        		b1.add(b);
         		if (i<4) {
-        			new Procesot(ultimo,b,1,i,n).start() ;
-        		}
+        			b = new Buzon(buzIntermedios);
+        			b1.add(b);
+        			new Procesot(ultimo,b1.get(b1.size()-1),1,i,n).start();
+        			
+        			
+        		}        		
+        		
         		else if (i<7) {
-        			new Procesot(ultimo,b,2,(i-3),n).start() ;
+        			b = new Buzon(buzIntermedios);
+            		b1.add(b);
+        			new Procesot(b1.get(i-3),b1.get(b1.size()-1),2,(i-3),n).start();
         		}
-        		else{
-        			new Procesot(ultimo,b,3,(i-6),n).start() ;
+        			
+        		else if (i<10){
+        			if (i==7) {
+        				b = new Buzon(buzExtremo);
+                        b1.add(b);
+        			}
+        			new Procesot(b1.get(i-3),b1.get(b1.size()-1),3,(i-6),n).start();
+        			
         		}
-        		ultimo=b;
+        		//ultimo=b1.get(b1.size()-1);
         	}
         	else {
-                new Procesot(ultimo,null,4,1,n).start() ;
+                new procesof(b1.get(b1.size()-1),4,1,n).start() ;
         	}
         }
-        System.out.println((b1.get(0)).darm());
+        //System.out.println((b1.get(0)).darm());
         
     }
 

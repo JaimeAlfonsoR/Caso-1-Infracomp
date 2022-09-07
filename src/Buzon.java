@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.List;
 
 public class Buzon {
 
@@ -10,6 +11,10 @@ public class Buzon {
     public ArrayList<String> darm(){
     	return mensajes;
     }
+    public int darc(){
+    	return capacidad;
+    }
+  
     
 
 
@@ -23,6 +28,11 @@ public class Buzon {
 
     }
 
+    public synchronized String retirar(String txt){
+    	txt= mensajes.get(0);
+    	mensajes.remove(0);
+    	return txt;
+    }
     public synchronized String quitar() {
     	while (this.mensajes.size()<=0){
     		try {
@@ -30,20 +40,15 @@ public class Buzon {
 			} catch (InterruptedException e) {
 			}
     	}
-   		
-    	String txt= mensajes.get(mensajes.size()-1);
-    	mensajes.remove(mensajes.size()-1);
+   		String txt="";
+    	txt = retirar(txt);
     	notify();
     	return txt;
     }
     public synchronized String quitarf() {
-    	String txt="";
-    	if (this.mensajes.size()<=0){
-				Thread.yield();
-				txt= mensajes.get(mensajes.size()-1);
-		    	mensajes.remove(mensajes.size()-1);
-    	}	
-   		
+    	String txt="";	
+    	txt = retirar(txt);
+    	notifyAll();
     	return txt;
     }
     public synchronized void poner(String t) {
@@ -55,18 +60,15 @@ public class Buzon {
     	}
    		
     	mensajes.add(t);
-    	System.out.println(mensajes);
-    	notify();
+    	//System.out.println(mensajes);
+    	notifyAll();
 
     }
     public synchronized void poneri(String t) {
-    	if(this.mensajes.size()>=this.capacidad){
-    		Thread.yield();
-    		mensajes.add(t);
-        	System.out.println(mensajes);
-    	}
     	
-    	//ocupacion+=1;
+    	mensajes.add(t);
+    	notifyAll();
+       	
 
     }
     

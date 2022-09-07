@@ -16,50 +16,26 @@ public class Procesot extends Thread {
 		
 	}
 	public void run(){
-		if (nivel==0) {
-			while (nMensajes>0) {
-				M+=1;
-				txt="";
-				transformari();
-				salida.poneri(txt);
-				nMensajes-=1;
-			}
-			int e = 0;
-			while (e<M) {
 			
-			salida.poneri("FIN");
-			}
-		}
-		if (nivel==4) {
-			while (txt!="FIN") {
-				txt=entrada.quitarf();
-				System.out.println(txt);
-			}
-			txt=entrada.quitarf();
-			System.out.println(txt);
-			txt=entrada.quitarf();
-			System.out.println(txt);
-			txt=entrada.quitarf();
-			System.out.println(txt);
-		}
-		else {
+		while ( txt!="FIN" ) {
 			
-		
-			while (txt!="FIN") {
-				txt=entrada.quitar();
-				transformar();
+			txt=entrada.quitar();
+			if (txt=="FIN") {
 				salida.poner(txt);
-				//nMensajes-=1;
 			}
-			salida.poner(txt);
-		}	
+			else {
+				txt=transformar(txt);
+				//System.out.println(txt);
+				salida.poner(txt);
+				nMensajes-=1;
+			}	
+		}
+	
 		
 	}
-	public void transformar() {
+	public String transformar(String txt) {
 	   txt+=("T"+ String.valueOf(nivel)+String.valueOf(M));
-	}
-	public void transformari() {
-		txt+=("M"+String.valueOf(M));
+	   return txt;
 	}
 	
 
